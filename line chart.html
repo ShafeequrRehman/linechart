@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Line Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-3d"></script>
+  <style>
+    /* Body Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f0f1e;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Chart Container */
+    .chart-container {
+      position: relative;
+      width: 90vw; /* Responsive width */
+      max-width: 600px; /* Maximum width for larger screens */
+      height: 90vw; /* Maintain aspect ratio */
+      max-height: 600px; /* Maximum height for larger screens */
+      padding: 5%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      width: 100%; /* Full width of container */
+      height: auto; /* Maintain aspect ratio */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+      .chart-container {
+        padding: 10%; /* Add extra padding on smaller devices */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chart-container">
+    <!-- Line Chart -->
+    <canvas id="lineChart"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('lineChart').getContext('2d');
+
+    const lineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['2019', '2020', '2021', '2022', '2024','2025'], // Labels for x-axis
+        datasets: [{
+          label: 'Votes',
+          data: [15, 10, 8, 12,5,7,10],
+          borderColor: '#ffffff',
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            grid: {
+              color: '#ffffff30', // Set grid line color to white
+            },
+            ticks: {
+              color: '#ffffff', // Set tick label color to white
+            },
+          },
+          y: {
+            grid: {
+              color: '#ffffff30', // Set grid line color to white
+            },
+            ticks: {
+              color: '#ffffff', // Set tick label color to white
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            display: false,
+            labels: {
+              color: '#ffffff', // Set legend label color to white
+            },
+          },
+          tooltip: {
+            enabled: true, // Enable tooltip
+            backgroundColor: '#333',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+          },
+        },
+        responsive: true, // Enable responsiveness
+        maintainAspectRatio: true, // Maintain chart aspect ratio
+      },
+    });
+  </script>
+</body>
+</html>
