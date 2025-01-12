@@ -3,105 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Line Chart</title>
+  <title>Vertical Bar Chart with Background Image</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-3d"></script>
   <style>
     /* Body Styles */
     body {
       font-family: Arial, sans-serif;
-      background: transparent;
+      background: #1d1d25;
       margin: 0;
-      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 100vh;
     }
 
     /* Chart Container */
     .chart-container {
       position: relative;
-      width: 90vw; /* Responsive width */
-      max-width: 500px; /* Maximum width for larger screens */
-      height: 90vw; /* Maintain aspect ratio */
-      max-height: 200px; /* Maximum height for larger screens */
-      padding: 5%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    canvas {
-      width: 100%; /* Full width of container */
-      height: auto; /* Maintain aspect ratio */
-    }
-
-    /* Responsive adjustments for smaller screens */
-    @media (max-width: 768px) {
-      .chart-container {
-        padding: 10%; /* Add extra padding on smaller devices */
-      }
+      width: 80%;
+      height: 400px;
     }
   </style>
 </head>
 <body>
   <div class="chart-container">
-    <!-- Line Chart -->
-    <canvas id="lineChart"></canvas>
+    <canvas id="verticalBarChart"></canvas>
   </div>
 
   <script>
-    const ctx = document.getElementById('lineChart').getContext('2d');
+    // Load the background image
+    const backgroundImage = new Image();
+    backgroundImage.src = 'https://raw.githubusercontent.com/ShafeequrRehman/barimage/098f270d45051ab286c2bef7df3c3ccf0e31fae0/Group%20207%20(5).svg';
 
-    const lineChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['2019', '2020', '2021', '2022', '2024','2025'], // Labels for x-axis
-        datasets: [{
-          label: 'Votes',
-          data: [15, 10, 8, 12,5,7,10],
-          borderColor: '#ffffff',
-          backgroundColor: 'rgba(255, 255, 255, 0.2)',
-          borderWidth: 2,
-        }]
-      },
-      options: {
-        scales: {
-          x: {
-            grid: {
-              color: '#ffffff30', // Set grid line color to white
+    backgroundImage.onload = () => {
+      const ctx = document.getElementById('verticalBarChart').getContext('2d');
+
+      // Custom plugin to draw the background image
+      const backgroundPlugin = {
+        id: 'customCanvasBackgroundImage',
+        beforeDraw: (chart) => {
+          const { ctx, chartArea } = chart;
+          ctx.save();
+          ctx.drawImage(backgroundImage, chartArea.left, chartArea.top, chartArea.width, chartArea.height);
+          ctx.restore();
+        },
+      };
+
+      // Initialize the chart
+      const verticalBarChart = new Chart(ctx, {
+        type: 'line', // Default is vertical
+        data: {
+          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+          datasets: [{
+            label: 'Votes',
+            data: [12, 19, 15, 5, 2],
+            backgroundColor: [
+              '#1d1d2590',
+              '#08a6db10',
+              '#1954EC30',
+              '#1954EC',
+              '#0f152e',
+            ],
+            hoverBackgroundColor: [
+              '#1d1d25',
+              '#08a6db',
+              '#1954EC',
+              '#1954EC',
+              '#0f152e',
+            ],
+            borderWidth: 0.5,
+            borderColor: '#ffffff50',
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: false, // Hide legend
             },
-            ticks: {
-              color: '#ffffff', // Set tick label color to white
+            tooltip: {
+              enabled: true, // Enable tooltips
             },
           },
-          y: {
-            grid: {
-              color: '#ffffff30', // Set grid line color to white
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: {
+                color: '#ffffff', // X-axis labels color
+              },
             },
-            ticks: {
-              color: '#ffffff', // Set tick label color to white
+            y: {
+              beginAtZero: true, // Start Y-axis at 0
+              ticks: {
+                color: '#ffffff', // Y-axis labels color
+              },
             },
           },
         },
-        plugins: {
-          legend: {
-            display: false,
-            labels: {
-              color: '#ffffff', // Set legend label color to white
-            },
-          },
-          tooltip: {
-            enabled: true, // Enable tooltip
-            backgroundColor: '#0f0f1e',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-          },
-        },
-        responsive: true, // Enable responsiveness
-        maintainAspectRatio: true, // Maintain chart aspect ratio
-      },
-    });
+        plugins: [backgroundPlugin], // Register the background image plugin
+      });
+    };
   </script>
 </body>
 </html>
